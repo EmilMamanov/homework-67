@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface KeyboardState {
     password: string;
@@ -15,7 +15,21 @@ const initialState: KeyboardState = {
 const keyboardSlice = createSlice({
     name: 'keyboard',
     initialState,
-    reducers: {},
+    reducers: {
+        pressKey: (state, action: PayloadAction<string>) => {
+            if (state.input.length < 4) {
+                state.input += action.payload;
+            }
+        },
+        deleteLastKey: (state) => {
+            state.input = state.input.slice(0, -1);
+        },
+        checkPassword: (state) => {
+            state.isCorrect = state.input === state.password;
+        },
+    },
 });
+
+export const { pressKey, deleteLastKey, checkPassword } = keyboardSlice.actions;
 
 export default keyboardSlice.reducer;
